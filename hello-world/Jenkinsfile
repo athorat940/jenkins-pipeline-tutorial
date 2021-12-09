@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+    stages {
+        stage('Static Analysis') {
+            steps {
+                echo 'Run the static analysis to the code' 
+            }
+        }
+        stage('Compile') {
+            steps {
+                echo 'Compile the source code' 
+            }
+        }
+        stage('Security Check') {
+            steps {
+                echo 'Run the security check against the application' 
+            }
+        }
+        stage('Run Unit Tests') {
+            steps {
+                echo 'Run unit tests from the source code' 
+            }
+        }
+        stage('Run Integration Tests') {
+            steps {
+                echo 'Run only crucial integration tests from the source code' 
+            }
+        }
+        stage('Publish Artifacts') {
+            steps {
+                echo 'Save the assemblies generated from the compilation' 
+            }
+        }
+    }
+	post {
+		always {
+			echo 'This will always run'
+		}
+		success {
+			echo 'pipeline success'
+			sh 'curl --user akshata:11deff2f1f3b7a1f14675fec36fdc6aec7 -H "Accept: application/json+v3" http://18.116.34.12:8080/job/post_build/lastBuild/api/json -o myresponse.json'
+			sh 'cat myresponse.json'
+			sh 'curl -i -X POST https://event-handler-qlzk4qz7wa-uc.a.run.app -H "Content-Type: application/json" --data-binary "@myresponse.json"'
+		}
+		failure {
+			echo 'pipeline failed'
+		}
+	
+	}
+}
