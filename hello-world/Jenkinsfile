@@ -38,7 +38,7 @@ pipeline {
 		}
 		success {
 			echo 'pipeline success'
-			sh 'curl --user admin:11748f61c89f01f824813173a5223b3e4e -H "Accept: application/json+v3" http:///job/test-pipeline/lastBuild/api/json -o myresponse.json'
+			sh 'curl --user admin:11748f61c89f01f824813173a5223b3e4e -H "Accept: application/json+v3" http://18.191.151.201:8080/job/test-pipeline/lastBuild/api/json -o myresponse.json'
 			sh 'cat myresponse.json'
 			sh 'curl -i -X POST https://event-handler-qlzk4qz7wa-uc.a.run.app -H "Content-Type: application/json" --data-binary "@myresponse.json"'
 			build job: 'close_issue'
